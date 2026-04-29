@@ -8,6 +8,7 @@ import com.ballotbuddy.service.GeminiApiService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@Validated
+@CrossOrigin(origins = "http://localhost:8080")
 public class ChatController {
 
     private final GeminiApiService geminiApiService;

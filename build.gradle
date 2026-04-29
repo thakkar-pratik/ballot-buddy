@@ -52,20 +52,7 @@ jacocoTestReport {
     // Exclude classes with no business logic from coverage reports
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                // Main application class (Spring Boot boilerplate)
-                '**/BallotBuddyApplication.class',
-
-                // DTOs - Simple data transfer objects with only Lombok annotations
-                '**/dto/**',
-
-                // Entities - Simple data classes with only Lombok annotations
-                '**/entity/**',
-
-                // Lombok-generated builder classes
-                '**/*Builder.class',
-                '**/*Builder$*.class'
-            ])
+            fileTree(dir: it)
         }))
     }
 }

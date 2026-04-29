@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Interactive Voting Guide Logic
-    window.showStep = function(stepNumber) {
+    const showStep = function(stepNumber) {
         // Hide all contents
         document.querySelectorAll('.step-content').forEach(content => {
             content.classList.add('hidden');
@@ -16,19 +16,35 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.step-btn')[stepNumber - 1].classList.add('active');
     };
 
-    window.pressEVMButton = function(id) {
+    const pressEVMButton = function(id) {
+        const parties = {
+            1: "Bharatiya Janata Party (BJP)",
+            2: "Indian National Congress (INC)",
+            3: "Aam Aadmi Party (AAP)",
+            4: "Bahujan Samaj Party (BSP)"
+        };
+        
         playBeep();
         
         // Light up the specific LED
         const led = document.getElementById(`led-${id}`);
-        led.classList.add('active');
+        if (led) led.classList.add('active');
         
         setTimeout(() => {
-            alert("🗳️ BEEP! Your vote for Candidate " + id + " has been cast.");
+            alert("🗳️ BEEP! Your vote for " + (parties[id] || "Candidate") + " has been cast.");
             showStep(4);
-            led.classList.remove('active');
+            if (led) led.classList.remove('active');
         }, 800);
     };
+
+    // Attach Event Listeners (Strict CSP)
+    document.querySelectorAll('.step-btn').forEach(btn => {
+        btn.addEventListener('click', () => showStep(btn.dataset.step));
+    });
+
+    document.querySelectorAll('.evm-vote-btn').forEach(btn => {
+        btn.addEventListener('click', () => pressEVMButton(btn.dataset.id));
+    });
 
     function playBeep() {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();

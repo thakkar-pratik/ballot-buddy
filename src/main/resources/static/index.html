@@ -26,10 +26,10 @@
         
         <div class="voting-wizard">
             <div class="wizard-steps">
-                <button class="step-btn active" onclick="showStep(1)" aria-label="Step 1: Verification">1. Verification</button>
-                <button class="step-btn" onclick="showStep(2)" aria-label="Step 2: Ink Marking">2. Ink Marking</button>
-                <button class="step-btn" onclick="showStep(3)" aria-label="Step 3: The EVM">3. The EVM</button>
-                <button class="step-btn" onclick="showStep(4)" aria-label="Step 4: VVPAT">4. VVPAT</button>
+                <button class="step-btn active" data-step="1" aria-label="Step 1: Verification">1. Verification</button>
+                <button class="step-btn" data-step="2" aria-label="Step 2: Ink Marking">2. Ink Marking</button>
+                <button class="step-btn" data-step="3" aria-label="Step 3: The EVM">3. The EVM</button>
+                <button class="step-btn" data-step="4" aria-label="Step 4: VVPAT">4. VVPAT</button>
             </div>
             
             <div class="step-content" id="step-1">
@@ -64,34 +64,34 @@
                             <!-- Row 1 -->
                             <div class="evm-row">
                                 <span class="evm-num">1</span>
-                                <span class="evm-name">Candidate Alpha</span>
-                                <span class="evm-symbol">🐘</span>
+                                <span class="evm-name">Bharatiya Janata Party (BJP)</span>
+                                <span class="evm-symbol">🪷</span>
                                 <div class="evm-led" id="led-1"></div>
-                                <button class="evm-vote-btn" onclick="pressEVMButton(1)" aria-label="Vote for Candidate 1"></button>
+                                <button class="evm-vote-btn" data-id="1" aria-label="Vote for BJP"></button>
                             </div>
                             <!-- Row 2 -->
                             <div class="evm-row">
                                 <span class="evm-num">2</span>
-                                <span class="evm-name">Candidate Beta</span>
+                                <span class="evm-name">Indian National Congress (INC)</span>
                                 <span class="evm-symbol">✋</span>
                                 <div class="evm-led" id="led-2"></div>
-                                <button class="evm-vote-btn" onclick="pressEVMButton(2)" aria-label="Vote for Candidate 2"></button>
+                                <button class="evm-vote-btn" data-id="2" aria-label="Vote for INC"></button>
                             </div>
                             <!-- Row 3 -->
                             <div class="evm-row">
                                 <span class="evm-num">3</span>
-                                <span class="evm-name">Candidate Gamma</span>
-                                <span class="evm-symbol">🪷</span>
+                                <span class="evm-name">Aam Aadmi Party (AAP)</span>
+                                <span class="evm-symbol">🧹</span>
                                 <div class="evm-led" id="led-3"></div>
-                                <button class="evm-vote-btn" onclick="pressEVMButton(3)" aria-label="Vote for Candidate 3"></button>
+                                <button class="evm-vote-btn" data-id="3" aria-label="Vote for AAP"></button>
                             </div>
                             <!-- Row 4 -->
                             <div class="evm-row">
                                 <span class="evm-num">4</span>
-                                <span class="evm-name">Candidate Delta</span>
-                                <span class="evm-symbol">🚲</span>
+                                <span class="evm-name">Bahujan Samaj Party (BSP)</span>
+                                <span class="evm-symbol">🐘</span>
                                 <div class="evm-led" id="led-4"></div>
-                                <button class="evm-vote-btn" onclick="pressEVMButton(4)" aria-label="Vote for Candidate 4"></button>
+                                <button class="evm-vote-btn" data-id="4" aria-label="Vote for BSP"></button>
                             </div>
                         </div>
                     </div>

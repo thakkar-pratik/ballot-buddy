@@ -7,6 +7,7 @@ import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -51,6 +52,7 @@ public class AnalyticsStorageServiceImpl implements AnalyticsStorageService {
      * {@inheritDoc}
      */
     @Override
+    @Async
     public void saveSnapshot(AnalyticsSnapshotDto snapshot) {
         String content = String.format("Session: %s, Action: %s, Time: %s, Meta: %s",
                 snapshot.getSessionId(), snapshot.getAction(), snapshot.getTimestamp(), snapshot.getMetadata());
