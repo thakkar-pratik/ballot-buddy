@@ -114,13 +114,21 @@ $RECYCLE.BIN/
 .Trash-*
 .nfs*
 
-# Application specific
+# Application specific - Sensitive configuration files
 application-local.properties
 application-secrets.properties
+application-*.properties
+!application.properties
 *.env
 .env
 .env.local
 .env.*.local
+
+# API Keys and Secrets
+**/application-secrets.yml
+**/application-secrets.yaml
+**/application-local.yml
+**/application-local.yaml
 
 # Spring Boot
 /spring-shell.log

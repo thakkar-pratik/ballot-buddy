@@ -1,0 +1,9 @@
+# Copy this file to application-local.properties and fill in your actual API keys
+# application-local.properties is in .gitignore and will NOT be committed
+
+# Gemini API Configuration
+google.gemini.api.key=YOUR_GEMINI_API_KEY_HERE
+
+# GCP Storage Configuration (optional - for local development)
+gcp.project.id=YOUR_GCP_PROJECT_ID
+gcp.storage.bucket=YOUR_GCP_BUCKET_NAME
