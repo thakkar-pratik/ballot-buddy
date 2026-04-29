@@ -9,6 +9,11 @@ group = 'com.ballotbuddy'
 version = '1.0.0'
 sourceCompatibility = '11'
 
+// Disable the plain JAR (we only want the Spring Boot executable JAR)
+jar {
+    enabled = false
+}
+
 repositories {
     mavenCentral()
 }
