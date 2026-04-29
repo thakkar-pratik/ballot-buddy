@@ -34,6 +34,9 @@ class GlobalExceptionHandlerTest {
     @MockBean
     private CloudLoggingService cloudLoggingService;
 
+    @MockBean
+    private com.google.firebase.auth.FirebaseAuth firebaseAuth;
+
     @Autowired
     private ObjectMapper objectMapper;
 

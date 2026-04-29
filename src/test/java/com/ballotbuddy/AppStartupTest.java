@@ -26,6 +26,9 @@ class AppStartupTest {
     @MockBean
     private VertexAI vertexAI;
 
+    @MockBean
+    private com.google.firebase.auth.FirebaseAuth firebaseAuth;
+
     @Test
     void contextLoads() {
         // Verifies that the application context starts successfully

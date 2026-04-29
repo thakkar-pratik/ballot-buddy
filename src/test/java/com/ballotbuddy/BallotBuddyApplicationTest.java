@@ -28,6 +28,9 @@ class BallotBuddyApplicationTest {
     @MockBean
     private VertexAI vertexAI;
 
+    @MockBean
+    private com.google.firebase.auth.FirebaseAuth firebaseAuth;
+
     @Test
     void contextLoads() {
     }

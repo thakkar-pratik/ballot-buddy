@@ -38,6 +38,9 @@ class GlobalExceptionHandlerIntegrationTest {
     private Logging logging;
 
     @MockBean
+    private com.google.firebase.auth.FirebaseAuth firebaseAuth;
+
+    @MockBean
     private VertexAI vertexAI;
 
     @Test

@@ -28,6 +28,9 @@ class ElectionControllerTest {
     private ElectionService electionService;
 
     @MockBean
+    private com.google.firebase.auth.FirebaseAuth firebaseAuth;
+
+    @MockBean
     private CloudLoggingService cloudLoggingService;
 
     @Test
