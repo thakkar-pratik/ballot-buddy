@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing a single step in the election timeline.
+ */
 @Data
 @Builder
 @NoArgsConstructor

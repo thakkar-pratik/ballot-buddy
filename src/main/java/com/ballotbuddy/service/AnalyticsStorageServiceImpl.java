@@ -21,6 +21,10 @@ import java.util.UUID;
 @Service
 public class AnalyticsStorageServiceImpl implements AnalyticsStorageService {
 
+    private static final String BLOB_PREFIX = "analytics/";
+    private static final String CONTENT_TYPE = "text/plain";
+    private static final String FORMAT_CONTENT = "Session: %s, Action: %s, Time: %s, Meta: %s";
+
     @Value("${gcp.storage.bucket}")
     private String bucketName;
 
@@ -36,7 +40,7 @@ public class AnalyticsStorageServiceImpl implements AnalyticsStorageService {
     protected void init() {
         try {
             this.storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.warn("Could not initialize GCP Storage: {}", e.getMessage());
         }
     }
@@ -54,20 +58,20 @@ public class AnalyticsStorageServiceImpl implements AnalyticsStorageService {
     @Override
     @Async
     public void saveSnapshot(AnalyticsSnapshotDto snapshot) {
-        String content = String.format("Session: %s, Action: %s, Time: %s, Meta: %s",
+        String content = String.format(FORMAT_CONTENT,
                 snapshot.getSessionId(), snapshot.getAction(), snapshot.getTimestamp(), snapshot.getMetadata());
 
         try {
             if (storage == null) {
                 throw new IllegalStateException("Storage service not initialized");
             }
-            String blobName = "analytics/" + UUID.randomUUID() + ".txt";
+            String blobName = BLOB_PREFIX + UUID.randomUUID() + ".txt";
             BlobId blobId = BlobId.of(bucketName, blobName);
-            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(CONTENT_TYPE).build();
             
             storage.create(blobInfo, content.getBytes(StandardCharsets.UTF_8));
             log.info("Analytics snapshot saved to GCP: {}", blobName);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.warn("GCP Storage unavailable. Falling back to local logging. Error: {}", e.getMessage());
             log.info("[LOCAL ANALYTICS] {}", content);
         }

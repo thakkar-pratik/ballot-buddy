@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * REST Controller handling AI chat interactions.
+ * Provides endpoints for users to ask election-related questions.
+ */
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
@@ -23,10 +27,19 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:8080")
 public class ChatController {
 
+    private static final String ACTION_USER_QUERY = "USER_QUERY";
+
     private final GeminiApiService geminiApiService;
     private final AnalyticsStorageService analyticsStorageService;
     private final CloudLoggingService cloudLoggingService;
 
+    /**
+     * Processes a user's chat request and returns an AI-generated response.
+     * Logs the request and response asynchronously.
+     *
+     * @param request the validated chat request payload
+     * @return a ResponseEntity containing the chat response
+     */
     @PostMapping("/ask")
     public ResponseEntity<ChatResponse> askQuestion(@Valid @RequestBody ChatRequest request) {
         // Structured logging to GCP
@@ -37,7 +50,7 @@ public class ChatController {
         // Log analytics asynchronously to GCP Storage
         analyticsStorageService.saveSnapshot(AnalyticsSnapshotDto.builder()
                 .sessionId(UUID.randomUUID().toString())
-                .action("USER_QUERY")
+                .action(ACTION_USER_QUERY)
                 .timestamp(LocalDateTime.now())
                 .metadata(request.getQuery())
                 .build());

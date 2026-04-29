@@ -8,6 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
+/**
+ * Configuration class for Google Cloud Secret Manager.
+ * Safely initializes the SecretManagerServiceClient.
+ */
 @Configuration
 public class SecretManagerConfig {
 

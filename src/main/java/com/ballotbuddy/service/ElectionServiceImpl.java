@@ -19,6 +19,10 @@ import java.util.List;
 @Slf4j
 public class ElectionServiceImpl implements ElectionService {
 
+    private static final String CONTEXT_HEADER = "General Election Timeline Context:\n";
+    private static final String CONTEXT_STATE_HEADER = "\nState-wise Election Data (India):\n";
+    private static final String CONTEXT_STATE_FORMAT = "- %s: %d voters, Parties: %s, Candidates: %s, Next Election: %s\n";
+
     private final StateElectionRepository stateRepository;
 
     /**
@@ -80,7 +84,7 @@ public class ElectionServiceImpl implements ElectionService {
     @Override
     @Cacheable("electionTimelineContext")
     public String getTimelineContext() {
-        StringBuilder context = new StringBuilder("General Election Timeline Context:\n");
+        StringBuilder context = new StringBuilder(CONTEXT_HEADER);
         getTimeline().forEach(step -> context.append("- ")
                 .append(step.getTitle())
                 .append(" on ")
@@ -89,9 +93,9 @@ public class ElectionServiceImpl implements ElectionService {
                 .append(step.getDescription())
                 .append("\n"));
         
-        context.append("\nState-wise Election Data (India):\n");
+        context.append(CONTEXT_STATE_HEADER);
         stateRepository.findAll().forEach(state -> {
-            context.append(String.format("- %s: %d voters, Parties: %s, Candidates: %s, Next Election: %s\n",
+            context.append(String.format(CONTEXT_STATE_FORMAT,
                 state.getStateName(), state.getVoterCount(), state.getParties(), state.getMainParticipants(), state.getElectionDate()));
         });
         

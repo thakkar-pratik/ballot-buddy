@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object representing the AI's chat response.
+ */
 @Data
 @Builder
 @NoArgsConstructor

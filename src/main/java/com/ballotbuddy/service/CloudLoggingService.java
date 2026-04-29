@@ -15,6 +15,8 @@ import java.util.Collections;
 @Service
 public class CloudLoggingService {
 
+    private static final String LOG_NAME = "ballot-buddy-app";
+
     private final Logging logging;
 
     public CloudLoggingService(Logging logging) {
@@ -30,10 +32,10 @@ public class CloudLoggingService {
         try {
             LogEntry entry = LogEntry.newBuilder(Payload.StringPayload.of(message))
                     .setSeverity(severity)
-                    .setLogName("ballot-buddy-app")
+                    .setLogName(LOG_NAME)
                     .build();
             logging.write(Collections.singleton(entry));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             // Fallback to standard logging if GCP is unavailable
             org.slf4j.LoggerFactory.getLogger(CloudLoggingService.class)
                     .warn("Could not write to Cloud Logging: {}", e.getMessage());

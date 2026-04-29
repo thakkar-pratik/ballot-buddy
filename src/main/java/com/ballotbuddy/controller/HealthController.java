@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/health")
 public class HealthController {
 
+    private static final String STATUS_UP = "UP";
+    private static final String HEALTH_MESSAGE = "Ballot Buddy is ready to help!";
+    private static final String APP_VERSION = "1.0.0-PROD";
+
     /**
      * Simple health check endpoint.
      * @return HealthResponse DTO.
@@ -20,9 +24,9 @@ public class HealthController {
     @GetMapping
     public ResponseEntity<HealthResponse> health() {
         return ResponseEntity.ok(HealthResponse.builder()
-                .status("UP")
-                .message("Ballot Buddy is ready to help!")
-                .version("1.0.0-PROD")
+                .status(STATUS_UP)
+                .message(HEALTH_MESSAGE)
+                .version(APP_VERSION)
                 .build());
     }
 }

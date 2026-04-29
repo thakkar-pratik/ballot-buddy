@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * JPA Repository for accessing StateElection records.
+ */
 @Repository
 public interface StateElectionRepository extends JpaRepository<StateElection, Long> {
     Optional<StateElection> findByStateNameIgnoreCase(String stateName);

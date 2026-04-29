@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+/**
+ * Configuration class that populates the H2 in-memory database with initial election data.
+ * Used for local intelligence fallback mechanisms.
+ */
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
