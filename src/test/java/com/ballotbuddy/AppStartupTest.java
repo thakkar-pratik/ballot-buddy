@@ -2,18 +2,33 @@ package com.ballotbuddy;
 
 import com.ballotbuddy.config.DataInitializer;
 import com.ballotbuddy.repository.StateElectionRepository;
+import com.google.cloud.logging.Logging;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.vertexai.VertexAI;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class AppStartupTest {
 
+    @MockBean
+    private Storage storage;
+
+    @MockBean
+    private Logging logging;
+
+    @MockBean
+    private VertexAI vertexAI;
+
     @Test
-    void testMain() {
-        // Exercise the main application entry point
-        BallotBuddyApplication.main(new String[]{"--server.port=0"});
+    void contextLoads() {
+        // Verifies that the application context starts successfully
     }
 
     @Test

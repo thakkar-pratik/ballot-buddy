@@ -5,6 +5,7 @@ import com.ballotbuddy.entity.StateElection;
 import com.ballotbuddy.repository.StateElectionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ElectionServiceImpl implements ElectionService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable("electionTimeline")
     public List<ElectionStepResponse> getTimeline() {
         log.debug("Fetching election timeline steps");
         List<ElectionStepResponse> timeline = new ArrayList<>();
@@ -76,6 +78,7 @@ public class ElectionServiceImpl implements ElectionService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable("electionTimelineContext")
     public String getTimelineContext() {
         StringBuilder context = new StringBuilder("General Election Timeline Context:\n");
         getTimeline().forEach(step -> context.append("- ")

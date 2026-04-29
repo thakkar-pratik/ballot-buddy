@@ -2,6 +2,7 @@ package com.ballotbuddy.controller;
 
 import com.ballotbuddy.dto.ElectionStepResponse;
 import com.ballotbuddy.entity.StateElection;
+import com.ballotbuddy.service.CloudLoggingService;
 import com.ballotbuddy.service.ElectionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ class ElectionControllerTest {
 
     @MockBean
     private ElectionService electionService;
+
+    @MockBean
+    private CloudLoggingService cloudLoggingService;
 
     @Test
     void getTimeline_ReturnsWrappedSteps() throws Exception {

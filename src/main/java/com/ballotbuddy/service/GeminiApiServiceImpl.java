@@ -4,40 +4,35 @@ import com.ballotbuddy.dto.ChatRequest;
 import com.ballotbuddy.dto.ChatResponse;
 import com.ballotbuddy.entity.StateElection;
 import com.ballotbuddy.repository.StateElectionRepository;
+import com.google.cloud.vertexai.VertexAI;
+import com.google.cloud.vertexai.generativeai.GenerativeModel;
+import com.google.cloud.vertexai.generativeai.ResponseHandler;
+import com.google.cloud.vertexai.api.GenerateContentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Implementation of {@link GeminiApiService} handling external AI and local fallbacks.
+ * Implementation of {@link GeminiApiService} handling external AI via Vertex AI SDK and local fallbacks.
  */
 @Slf4j
 @Service
 public class GeminiApiServiceImpl implements GeminiApiService {
 
-    private final RestTemplate restTemplate;
     private final ElectionService electionService;
     private final StateElectionRepository stateRepository;
+    private final VertexAI vertexAI;
 
-    @Value("${google.gemini.api.key}")
-    private String apiKey;
+    @Value("${google.gemini.model:gemini-1.5-pro}")
+    private String modelName;
 
-    @Value("${google.gemini.api.url}")
-    private String apiUrl;
-
-    public GeminiApiServiceImpl(ElectionService electionService, StateElectionRepository stateRepository) {
-        this.restTemplate = new RestTemplate();
+    public GeminiApiServiceImpl(ElectionService electionService, StateElectionRepository stateRepository, VertexAI vertexAI) {
         this.electionService = electionService;
         this.stateRepository = stateRepository;
+        this.vertexAI = vertexAI;
     }
 
     /**
@@ -45,47 +40,23 @@ public class GeminiApiServiceImpl implements GeminiApiService {
      */
     @Override
     public ChatResponse askQuestion(ChatRequest request) {
-        log.info("Processing user question: {}", request.getQuery());
-
-        if (apiKey == null || apiKey.equals("REPLACE_ME") || apiKey.isEmpty()) {
-            log.warn("Gemini API key not configured. Using local H2 fallback.");
-            return getFallbackResponse(request.getQuery());
-        }
-
-        String context = electionService.getTimelineContext();
-        String prompt = String.format(
-            "You are Ballot Buddy, an elite election guide. Use the following context to answer the user's question accurately.\n\n" +
-            "Context:\n%s\n\nUser Question: %s", context, request.getQuery()
-        );
-
-        String fullUrl = apiUrl + "?key=" + apiKey;
-        Map<String, Object> body = Map.of(
-            "contents", List.of(Map.of("parts", List.of(Map.of("text", prompt))))
-        );
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+        log.info("Processing user question via Vertex AI: {}", request.getQuery());
 
         try {
-            Map<String, Object> response = restTemplate.postForObject(fullUrl, entity, Map.class);
-            String aiText = extractTextFromResponse(response);
+            String context = electionService.getTimelineContext();
+            String prompt = String.format(
+                "You are Ballot Buddy, an elite election guide. Use the following context to answer the user's question accurately.\n\n" +
+                "Context:\n%s\n\nUser Question: %s", context, request.getQuery()
+            );
+
+            GenerativeModel model = new GenerativeModel(modelName, vertexAI);
+            GenerateContentResponse response = model.generateContent(prompt);
+            String aiText = ResponseHandler.getText(response);
+            
             return buildResponse(aiText);
         } catch (Exception e) {
-            log.error("Error calling Gemini API: {}. Switching to H2 Fallback.", e.getMessage());
+            log.error("Vertex AI SDK error: {}. Switching to H2 Fallback.", e.getMessage());
             return getFallbackResponse(request.getQuery());
-        }
-    }
-
-    private String extractTextFromResponse(Map<String, Object> response) {
-        try {
-            List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
-            Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
-            List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
-            return (String) parts.get(0).get("text");
-        } catch (Exception e) {
-            log.error("Error parsing Gemini response: {}", e.getMessage());
-            return "Error parsing response from AI.";
         }
     }
 

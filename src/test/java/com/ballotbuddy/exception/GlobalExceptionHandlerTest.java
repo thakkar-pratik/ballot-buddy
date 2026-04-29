@@ -3,6 +3,7 @@ package com.ballotbuddy.exception;
 import com.ballotbuddy.controller.ChatController;
 import com.ballotbuddy.dto.ChatRequest;
 import com.ballotbuddy.service.AnalyticsStorageService;
+import com.ballotbuddy.service.CloudLoggingService;
 import com.ballotbuddy.service.GeminiApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class GlobalExceptionHandlerTest {
 
     @MockBean
     private AnalyticsStorageService analyticsStorageService;
+
+    @MockBean
+    private CloudLoggingService cloudLoggingService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -59,7 +63,47 @@ class GlobalExceptionHandlerTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.errorCode").value("INTERNAL_SERVER_ERROR"))
-                .andExpect(jsonPath("$.message").value("An unexpected error occurred"))
-                .andExpect(jsonPath("$.details.technicalMessage").exists());
+                .andExpect(jsonPath("$.message").value("An unexpected internal error occurred"));
+    }
+
+    @Test
+    void handleAllExceptions_VertexAIError() throws Exception {
+        ChatRequest request = new ChatRequest("Test question");
+        when(geminiApiService.askQuestion(any())).thenThrow(new RuntimeException("VertexAI service error"));
+
+        mockMvc.perform(post("/api/chat/ask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("AI_SERVICE_ERROR"))
+                .andExpect(jsonPath("$.message").value("AI service is currently unavailable or ratelimited."));
+    }
+
+    @Test
+    void handleAllExceptions_GcpError() throws Exception {
+        ChatRequest request = new ChatRequest("Test question");
+        // Using a real GCP exception instead of a mock because getClass() is final
+        Exception gcpEx = new com.google.cloud.storage.StorageException(500, "GCP Storage failure");
+        
+        when(geminiApiService.askQuestion(any())).thenThrow(gcpEx);
+
+        mockMvc.perform(post("/api/chat/ask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.errorCode").value("GCP_SERVICE_ERROR"))
+                .andExpect(jsonPath("$.message").value("A background Google Cloud service encountered an issue."));
+    }
+
+    @Test
+    void handleAllExceptions_NullMessage() throws Exception {
+        ChatRequest request = new ChatRequest("Test question");
+        when(geminiApiService.askQuestion(any())).thenThrow(new RuntimeException((String)null));
+
+        mockMvc.perform(post("/api/chat/ask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.details.technicalMessage").value("No details available"));
     }
 }

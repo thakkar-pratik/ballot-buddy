@@ -130,6 +130,14 @@ application-*.properties
 **/application-local.yml
 **/application-local.yaml
 
+# Google Cloud / Firebase Credentials
+*-credentials.json
+service-account*.json
+firebase-credentials.json
+ballot-buddy-credentials.json
+gcp-key.json
+google-credentials.json
+
 # Spring Boot
 /spring-shell.log
 

@@ -125,22 +125,22 @@
     </main>
 
     <!-- Minimizable Chat Widget -->
-    <div id="chat-container" class="chat-container minimized">
-        <button id="chat-toggle" class="chat-toggle" aria-label="Toggle chat assistant">
-            <span id="chat-icon">💬</span>
+    <div id="chat-container" class="chat-container minimized" role="complementary" aria-label="Election Assistant Chat">
+        <button id="chat-toggle" class="chat-toggle" aria-label="Open chat assistant" aria-expanded="false" aria-controls="chat-widget">
+            <span id="chat-icon" aria-hidden="true">💬</span>
             <span id="chat-label">Ask Ballot Buddy</span>
         </button>
-        <aside id="chat-widget" class="chat-widget" aria-label="AI Chat Assistant">
+        <aside id="chat-widget" class="chat-widget" aria-label="AI Chat Assistant" role="dialog">
             <div class="chat-header">
-                <span>💬 Ballot Buddy AI</span>
-                <button id="chat-close" class="chat-close" aria-label="Close chat">×</button>
+                <span id="chat-header-title">💬 Ballot Buddy AI</span>
+                <button id="chat-close" class="chat-close" aria-label="Close chat assistant">×</button>
             </div>
-            <div id="chat-messages" class="chat-messages" aria-live="polite">
+            <div id="chat-messages" class="chat-messages" aria-live="polite" role="log" aria-relevant="additions text">
                 <div class="message ai">Hi! I'm Ballot Buddy. I now have access to Indian state election details! Ask me about voter counts or parties in Maharashtra, UP, etc.</div>
             </div>
-            <form id="chat-form" class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="How many voters in UP?" aria-label="Ask a question" required>
-                <button type="submit" aria-label="Send message">Send</button>
+            <form id="chat-form" class="chat-input-area" role="search" aria-label="Ask a question to AI">
+                <input type="text" id="chat-input" placeholder="How many voters in UP?" aria-label="Your question about elections" required>
+                <button type="submit" aria-label="Send question to assistant">Send</button>
             </form>
         </aside>
     </div>

@@ -3,6 +3,7 @@ package com.ballotbuddy.controller;
 import com.ballotbuddy.dto.ChatRequest;
 import com.ballotbuddy.dto.ChatResponse;
 import com.ballotbuddy.service.AnalyticsStorageService;
+import com.ballotbuddy.service.CloudLoggingService;
 import com.ballotbuddy.service.GeminiApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,6 +30,9 @@ class ChatControllerTest {
 
     @MockBean
     private AnalyticsStorageService analyticsStorageService;
+
+    @MockBean
+    private CloudLoggingService cloudLoggingService;
 
     @Autowired
     private ObjectMapper objectMapper;

@@ -105,6 +105,8 @@ async function fetchStates() {
         data.states.forEach(state => {
             const card = document.createElement('div');
             card.className = 'state-card';
+            card.setAttribute('role', 'article');
+            card.setAttribute('aria-label', `Election details for ${state.stateName}`);
             card.innerHTML = `
                 <h3>${state.stateName}</h3>
                 <div class="state-info"><strong>Voters:</strong> ${state.voterCount.toLocaleString()}</div>
@@ -126,8 +128,14 @@ function setupChatToggle() {
     const toggleBtn = document.getElementById('chat-toggle');
     const closeBtn = document.getElementById('chat-close');
 
-    toggleBtn.addEventListener('click', () => container.classList.remove('minimized'));
-    closeBtn.addEventListener('click', () => container.classList.add('minimized'));
+    toggleBtn.addEventListener('click', () => {
+        container.classList.remove('minimized');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+    });
+    closeBtn.addEventListener('click', () => {
+        container.classList.add('minimized');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+    });
 }
 
 function setupChat() {
