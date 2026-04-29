@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ballot Buddy | Your Election Education Assistant</title>
+    <meta name="description" content="Learn about the election process, timelines, and steps with Ballot Buddy, your personal AI-powered election assistant.">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 id="main-title">🗳️ Ballot Buddy</h1>
+        <p>Your interactive guide to the election process.</p>
+    </header>
+
+    <main class="container">
+        <!-- Interactive Voting Guide -->
+    <section class="guide-section" id="how-to-vote">
+        <div class="section-header">
+            <h2>How to Cast Your Vote</h2>
+            <p>Empower yourself with the knowledge of the voting process.</p>
+        </div>
+        
+        <div class="voting-wizard">
+            <div class="wizard-steps">
+                <button class="step-btn active" onclick="showStep(1)" aria-label="Step 1: Verification">1. Verification</button>
+                <button class="step-btn" onclick="showStep(2)" aria-label="Step 2: Ink Marking">2. Ink Marking</button>
+                <button class="step-btn" onclick="showStep(3)" aria-label="Step 3: The EVM">3. The EVM</button>
+                <button class="step-btn" onclick="showStep(4)" aria-label="Step 4: VVPAT">4. VVPAT</button>
+            </div>
+            
+            <div class="step-content" id="step-1">
+                <div class="step-text">
+                    <h3>Step 1: First Polling Officer</h3>
+                    <p>The first polling officer checks your name on the electoral roll and asks for your identity proof (e.g., EPIC/Voter ID card).</p>
+                </div>
+                <div class="step-visual">
+                    <img src="/images/evm.png" alt="Voting Process" class="evm-img-thumb">
+                </div>
+            </div>
+
+            <div class="step-content hidden" id="step-2">
+                <div class="step-text">
+                    <h3>Step 2: Second Polling Officer</h3>
+                    <p>The second polling officer marks your finger with indelible ink, gives you a slip, and takes your signature on a register.</p>
+                </div>
+                <div class="step-visual">
+                    <img src="/images/ink_finger.png" alt="Inked Finger" class="evm-img-thumb">
+                </div>
+            </div>
+
+            <div class="step-content hidden" id="step-3">
+                <div class="step-text">
+                    <h3>Step 3: Casting the Vote</h3>
+                    <p>Go to the voting compartment. Press the blue button on the Electronic Voting Machine (EVM) against the candidate of your choice.</p>
+                    
+                    <!-- Virtual EVM Balloting Unit -->
+                    <div class="evm-panel" role="region" aria-label="Virtual EVM Machine">
+                        <div class="evm-header">BALLOTING UNIT</div>
+                        <div class="evm-rows">
+                            <!-- Row 1 -->
+                            <div class="evm-row">
+                                <span class="evm-num">1</span>
+                                <span class="evm-name">Candidate Alpha</span>
+                                <span class="evm-symbol">🐘</span>
+                                <div class="evm-led" id="led-1"></div>
+                                <button class="evm-vote-btn" onclick="pressEVMButton(1)" aria-label="Vote for Candidate 1"></button>
+                            </div>
+                            <!-- Row 2 -->
+                            <div class="evm-row">
+                                <span class="evm-num">2</span>
+                                <span class="evm-name">Candidate Beta</span>
+                                <span class="evm-symbol">✋</span>
+                                <div class="evm-led" id="led-2"></div>
+                                <button class="evm-vote-btn" onclick="pressEVMButton(2)" aria-label="Vote for Candidate 2"></button>
+                            </div>
+                            <!-- Row 3 -->
+                            <div class="evm-row">
+                                <span class="evm-num">3</span>
+                                <span class="evm-name">Candidate Gamma</span>
+                                <span class="evm-symbol">🪷</span>
+                                <div class="evm-led" id="led-3"></div>
+                                <button class="evm-vote-btn" onclick="pressEVMButton(3)" aria-label="Vote for Candidate 3"></button>
+                            </div>
+                            <!-- Row 4 -->
+                            <div class="evm-row">
+                                <span class="evm-num">4</span>
+                                <span class="evm-name">Candidate Delta</span>
+                                <span class="evm-symbol">🚲</span>
+                                <div class="evm-led" id="led-4"></div>
+                                <button class="evm-vote-btn" onclick="pressEVMButton(4)" aria-label="Vote for Candidate 4"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-content hidden" id="step-4">
+                <div class="step-text">
+                    <h3>Step 4: VVPAT Verification</h3>
+                    <p>A slip will appear in the transparent window of the VVPAT machine for 7 seconds. It shows the serial number, name, and symbol of your chosen candidate before dropping into the sealed box.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- State Explorer Section -->
+        <section aria-labelledby="state-heading" style="margin-bottom: 4rem;">
+            <h2 id="state-heading" style="text-align: center; margin-bottom: 2rem;">🇮🇳 Indian State Election Intelligence</h2>
+            <div id="state-grid" class="state-grid" role="list">
+                <!-- State cards will be injected here -->
+                <div style="text-align: center; grid-column: 1/-1;">Loading state data...</div>
+            </div>
+        </section>
+
+        <section aria-labelledby="timeline-heading">
+            <h2 id="timeline-heading" style="text-align: center; margin-bottom: 2rem;">General Election Roadmap</h2>
+            <div id="timeline" class="timeline" role="list">
+                <!-- Timeline items will be injected here by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Minimizable Chat Widget -->
+    <div id="chat-container" class="chat-container minimized">
+        <button id="chat-toggle" class="chat-toggle" aria-label="Toggle chat assistant">
+            <span id="chat-icon">💬</span>
+            <span id="chat-label">Ask Ballot Buddy</span>
+        </button>
+        <aside id="chat-widget" class="chat-widget" aria-label="AI Chat Assistant">
+            <div class="chat-header">
+                <span>💬 Ballot Buddy AI</span>
+                <button id="chat-close" class="chat-close" aria-label="Close chat">×</button>
+            </div>
+            <div id="chat-messages" class="chat-messages" aria-live="polite">
+                <div class="message ai">Hi! I'm Ballot Buddy. I now have access to Indian state election details! Ask me about voter counts or parties in Maharashtra, UP, etc.</div>
+            </div>
+            <form id="chat-form" class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="How many voters in UP?" aria-label="Ask a question" required>
+                <button type="submit" aria-label="Send message">Send</button>
+            </form>
+        </aside>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
