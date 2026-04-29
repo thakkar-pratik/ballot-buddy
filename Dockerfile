@@ -5,15 +5,22 @@ FROM gradle:8.10-jdk17 AS build
 # Set working directory
 WORKDIR /app
 
-# Copy gradle files
-COPY build.gradle settings.gradle ./
+# Copy gradle wrapper files
+COPY gradlew ./
 COPY gradle ./gradle
+
+# Copy gradle configuration files
+COPY build.gradle ./
+COPY settings.gradle* ./
+
+# Download dependencies (cached layer)
+RUN ./gradlew dependencies --no-daemon || true
 
 # Copy source code
 COPY src ./src
 
 # Build the application (skip tests for faster builds)
-RUN gradle clean build -x test --no-daemon
+RUN ./gradlew clean build -x test --no-daemon
 
 # Stage 2: Create the runtime image
 FROM eclipse-temurin:17-jre-alpine
